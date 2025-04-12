@@ -1,0 +1,8 @@
+usart.c:11:6:USART_PeriClockControl	9
+usart.c:36:6:USART_Init	13
+usart.c:123:9:USART_GetFlagStatus	4
+usart.c:137:6:USART_SendData	7
+usart.c:186:6:USART_ReceiveData	6
+usart.c:238:19:USART_SendDataIT	2
+usart.c:257:9:USART_ReceiveDataIT	2
+usart.c:275:6:USART_SetBaudRate	5

@@ -1,0 +1,10 @@
+gpio.c:10:5:GPIO_ReadPin	2
+gpio.c:17:6:GPIO_SetPin	1
+gpio.c:21:6:GPIO_ResetPin	1
+gpio.c:25:6:GPIO_TogglePin	2
+gpio.c:32:6:GPIO_CLK_Ctrl	11
+gpio.c:62:6:GPIO_Init	4
+gpio.c:118:6:GPIO_DeInit	1
+gpio.c:122:6:GPIO_IRQConfig	12
+gpio.c:147:6:GPIO_IRQ_Set_Priority	1
+gpio.c:153:6:GPIO_IRQHandling	2
