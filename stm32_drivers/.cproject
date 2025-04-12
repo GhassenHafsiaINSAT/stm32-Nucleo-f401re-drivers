@@ -151,6 +151,7 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.pathentry"/>
@@ -161,10 +162,10 @@
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1353789698;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1353789698.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1217916253;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1104696955">
+		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1889030614;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1889030614.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1042982609;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1565035690">
 			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.919184610;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.919184610.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.386737721;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1577975346">
+		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.831990385;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.831990385.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.312727731;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1905754226">
 			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>
