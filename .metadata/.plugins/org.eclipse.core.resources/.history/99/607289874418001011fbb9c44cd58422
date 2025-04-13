@@ -242,20 +242,20 @@ typedef struct {
 	__vo uint32_t I2C_FLTR;
 } I2C_Typedef_t;
 
-#define I2C1 ((I2C_Typedef_t*)I2C1_BASE_ADDRESS)
-#define I2C2 ((I2C_Typedef_t*)I2C2_BASE_ADDRESS)
-#define I2C3 ((I2C_Typedef_t*)I2C3_BASE_ADDRESS)
+#define I2C1 ((SPI_Typedef_t*)I2C1_BASE_ADDRESS)
+#define I2C2 ((SPI_Typedef_t*)I2C2_BASE_ADDRESS)
+#define I2C3 ((SPI_Typedef_t*)I2C3_BASE_ADDRESS)
 
 
 // I2C Clock Enable
-#define I2C1_CLK_EN()	(RCC->RCC_APB1ENR |= (1 << 21))
-#define I2C2_CLK_EN()	(RCC->RCC_APB1ENR |= (1 << 22))
-#define I2C3_CLK_EN()	(RCC->RCC_APB1ENR |= (1 << 23))
+#define I2C1_CLK_EN()	(RCC->RCC_APB1ENR | (1 << 21))
+#define I2C2_CLK_EN()	(RCC->RCC_APB1ENR | (1 << 22))
+#define I2C3_CLK_EN()	(RCC->RCC_APB1ENR | (1 << 23))
 
 // I2C Clock Disable
-#define I2C1_CLK_DIS()	(RCC->RCC_APB1RSTR |= (1 << 21))
-#define I2C2_CLK_DIS()	(RCC->RCC_APB1RSTR |= (1 << 22))
-#define I2C3_CLK_DIS()	(RCC->RCC_APB1RSTR |= (1 << 23))
+#define I2C1_CLK_DIS()	(RCC->RCC_APB1RSTR | (1 << 21))
+#define I2C2_CLK_DIS()	(RCC->RCC_APB1RSTR | (1 << 22))
+#define I2C3_CLK_DIS()	(RCC->RCC_APB1RSTR | (1 << 23))
 
 // SPI register's bit positions
 // I2C_CR1

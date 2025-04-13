@@ -40,10 +40,11 @@ typedef struct {
  */
 #define I2C_FMDutyCycle_2		0
 #define I2C_FMDutyCycle_16_9	1
-
+#define I2C_ACK_ENABLE		100000
+#define I2C_ACK_DISABLE		400000
 
 void I2C_PeriClockControl(I2C_Typedef_t* I2Cx, uint8_t EnOrDis);
-void I2C_Init(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config);
+void I2C_Init(I2C_Handle_t* I2C_handler);
 void I2C_DeInit(I2C_Typedef_t I2Cx);
 
 void I2C_Master_Send(I2C_Typedef_t* I2Cx, uint8_t* pTxBuffer, uint32_t len);
@@ -52,8 +53,8 @@ void I2C_Master_Receive(I2C_Typedef_t* I2Cx, uint8_t* pRxBuffer, uint32_t len);
 void I2C_Slave_Send(I2C_Typedef_t* I2Cx, uint8_t* pTxBuffer, uint32_t len);
 void I2C_Slave_Receive(I2C_Typedef_t* I2Cx, uint8_t* pRxBuffer, uint32_t len);
 
-uint8_t I2C_Send_IT(I2C_handle_t* I2C_handler, uint8_t* pTxBuffer, uint32_t len);
-uint8_t I2C_Receive_IT(I2C_handle_t* I2C_handler, uint8_t* pRxBuffer, uint32_t len);
+uint8_t I2C_Send_IT(I2C_Handle_t* I2C_handler, uint8_t* pTxBuffer, uint32_t len);
+uint8_t I2C_Receive_IT(I2C_Handle_t* I2C_handler, uint8_t* pRxBuffer, uint32_t len);
 
 void I2C_IRQInterruptConfig(uint8_t IRQ_Number, uint8_t EnOrDis);
 void I2C_IRQPriorityConfig(uint8_t IRQ_Number, uint32_t IRQPriority);

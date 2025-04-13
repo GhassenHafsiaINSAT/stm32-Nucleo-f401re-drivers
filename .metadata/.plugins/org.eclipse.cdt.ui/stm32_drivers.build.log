@@ -1,0 +1,10 @@
+16:06:51 **** Incremental Build of configuration Debug for project stm32_drivers ****
+make -j8 all 
+arm-none-eabi-size   stm32_drivers.elf 
+   text	   data	    bss	    dec	    hex	filename
+   1544	      8	   1600	   3152	    c50	stm32_drivers.elf
+Finished building: default.size.stdout
+ 
+
+16:06:51 Build Finished. 0 errors, 0 warnings. (took 195ms)
+

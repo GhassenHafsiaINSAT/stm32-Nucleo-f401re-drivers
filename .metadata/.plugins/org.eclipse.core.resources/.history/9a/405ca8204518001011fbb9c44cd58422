@@ -248,14 +248,14 @@ typedef struct {
 
 
 // I2C Clock Enable
-#define I2C1_CLK_EN()	(RCC->RCC_APB1ENR |= (1 << 21))
-#define I2C2_CLK_EN()	(RCC->RCC_APB1ENR |= (1 << 22))
-#define I2C3_CLK_EN()	(RCC->RCC_APB1ENR |= (1 << 23))
+#define I2C1_CLK_EN()	(RCC->RCC_APB1ENR | (1 << 21))
+#define I2C2_CLK_EN()	(RCC->RCC_APB1ENR | (1 << 22))
+#define I2C3_CLK_EN()	(RCC->RCC_APB1ENR | (1 << 23))
 
 // I2C Clock Disable
-#define I2C1_CLK_DIS()	(RCC->RCC_APB1RSTR |= (1 << 21))
-#define I2C2_CLK_DIS()	(RCC->RCC_APB1RSTR |= (1 << 22))
-#define I2C3_CLK_DIS()	(RCC->RCC_APB1RSTR |= (1 << 23))
+#define I2C1_CLK_DIS()	(RCC->RCC_APB1RSTR | (1 << 21))
+#define I2C2_CLK_DIS()	(RCC->RCC_APB1RSTR | (1 << 22))
+#define I2C3_CLK_DIS()	(RCC->RCC_APB1RSTR | (1 << 23))
 
 // SPI register's bit positions
 // I2C_CR1
