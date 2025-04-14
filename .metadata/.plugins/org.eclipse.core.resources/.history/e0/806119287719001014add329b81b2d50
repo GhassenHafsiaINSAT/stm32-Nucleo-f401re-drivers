@@ -10,8 +10,9 @@
 
 
 static void I2C_Generate_StartCondition(I2C_Typedef_t* I2Cx);
-static void I2C_Send_slave_address(I2C_Typedef_t* I2Cx, uint8_t slave_address, uint8_t bit);
-static void I2C_clear_ADDR_bit(I2C_Typedef_t* I2Cx);
+static void I2C_Send_slave_address(I2C_Typedef_t* I2Cx, uint8_t slave_address);
+static void read_write_bit(I2C_Typedef_t* I2Cx, uint8_t bit);
+static void clear_ADDR_bit(I2C_Typedef_t* I2Cx);
 static void I2C_Generate_StopCondition(I2C_Typedef_t* I2Cx);
 
 
@@ -19,18 +20,20 @@ static void I2C_Generate_StartCondition(I2C_Typedef_t* I2Cx){
 	I2Cx->I2C_CR1 |= ( 1 << 8 );
 }
 
-static void I2C_Send_slave_address(I2C_Typedef_t* I2Cx, uint8_t slave_address, uint8_t bit){
-	uint8_t reg_temp = slave_address << 1;
-	if (bit == 0){
-		reg_temp &= ~(1);
-	}
-	else {
-		reg_temp |= 1;
-	}
-	I2Cx->I2C_DR = reg_temp;
+static void I2C_Send_slave_address(I2C_Typedef_t* I2Cx, uint8_t slave_address){
+	I2Cx->I2C_DR = slave_address << 1;
 }
 
-static void I2C_clear_ADDR_bit(I2C_Typedef_t* I2Cx){
+static void read_write_bit(I2C_Typedef_t* I2Cx, uint8_t bit){
+	if (bit == 0){
+		I2Cx->I2C_DR &= ~(1);
+	}
+	else {
+		I2Cx->I2C_DR |= 1;
+	}
+}
+
+static void clear_ADDR_bit(I2C_Typedef_t* I2Cx){
 	uint32_t dummy_read;
 	dummy_read = I2Cx->I2C_SR1;
 	dummy_read = I2Cx->I2C_SR2;
@@ -106,10 +109,10 @@ void I2C_Init(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config){
 	I2Cx->I2C_CCR = reg_temp;
 
 	if (i2c_config.I2C_SCLSpeed <= I2C_SCL_SPEED_SM){
-		reg_temp = (RCC_GetPCLK1Value() / 1000000U) + 1;
+		reg_temp = (RCC_GetPCLK1Value() / 1000000U) + 1
 	}
 	else {
-		reg_temp = ((RCC_GetPCLK1Value() * 300) / 1000000000U) + 1;
+		reg_temp = (RCC_GetPCLK1Value() * 300) / 1000000000U) + 1;
 	}
 	I2Cx->I2C_TRISE = reg_temp & 0x3F;
 	I2C_PeriClockControl(I2Cx, ENABLE);
@@ -129,13 +132,14 @@ void I2C_Master_Send(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* pTxB
 	while( !(I2Cx->I2C_SR1 & 1));
 
 	// write slave address and read/write bit
-	I2C_Send_slave_address(I2Cx, slave_address, 0);
+	I2C_Send_slave_address(I2Cx, slave_address);
+	read_write_bit(I2Cx, 0);
 
 	// wait until ADDR flag is set
 	while ( !(I2Cx->I2C_SR1 &  (1 << 1)));
 
 	// clear the ADDR flag
-	I2C_clear_ADDR_bit(I2Cx);
+	clear_ADDR_bit(I2Cx);
 
 	// send process
 	while (len != 0){
@@ -152,58 +156,4 @@ void I2C_Master_Send(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* pTxB
 
 	// Generate stop condition
 	I2C_Generate_StopCondition(I2Cx);
-}
-
-void I2C_Master_Receive(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* pRxBuffer, uint32_t len, uint8_t slave_address){
-	// generate start condition
-	I2C_Generate_StartCondition(I2Cx);
-
-	//wait until SB is cleared
-	while( !(I2Cx->I2C_SR1 & 1) );
-
-	// send slave address + read bit
-	I2C_Send_slave_address(I2Cx, slave_address, 1);
-
-	// check if ADDR bit is set -> the address phase is successful
-	while ( !(I2Cx->I2C_SR1 & (1 << 1)));
-
-	// waits until RXNE is set
-	if (len == 1){
-		// master sends nack to stop conversation
-		I2Cx->I2C_CR1 &= ~(1 << 10);
-
-		// clear ADDR bit
-		I2C_clear_ADDR_bit(I2Cx);
-
-		// wait until RXNE flag is set
-		while ( !(I2Cx->I2C_SR1 & (1 << 6)));
-
-		// generates stop condition
-		I2C_Generate_StopCondition(I2Cx);
-
-		// read from data register
-		*pRxBuffer = I2Cx->I2C_DR;
-
-	}
-	while ( len > 0){
-		// clear ADDR bit so the data reception begins
-		I2C_clear_ADDR_bit(I2Cx);
-
-		// wait for RXNE bit is equal to 1
-		while ( !(I2Cx->I2C_SR1 & (1 << 6)));
-		if ( len == 2){
-			// master sends NACK to stop conversation
-			I2Cx->I2C_CR1 &= ~(1 << 10);
-
-			// generates stop condition
-			I2C_Generate_StopCondition(I2Cx);
-		}
-		*pRxBuffer = (uint8_t)(I2Cx->I2C_DR);
-		pRxBuffer++;
-		len--;
-	}
-	// re-enable the ACKing
-	if (i2c_config.I2C_ACKControl == 1){
-		I2Cx->I2C_CR1 |= (1 << 10);
-	}
 }

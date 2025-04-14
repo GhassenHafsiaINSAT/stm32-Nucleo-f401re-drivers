@@ -1,0 +1,141 @@
+/*
+ * i2c.c
+ *
+ *  Created on: Apr 12, 2025
+ *      Author: ghass
+ */
+
+#include "i2c.h"
+#include "rcc.h"
+
+void I2C_PeriClockControl(I2C_Typedef_t* I2Cx, uint8_t EnOrDis){
+	if (EnOrDis == ENABLE){
+		if (I2Cx == I2C1){
+			I2C1_CLK_EN();
+		}
+		else if (I2Cx == I2C2){
+			I2C2_CLK_EN();
+		}
+		else if (I2Cx == I2C3){
+			I2C3_CLK_EN();
+		}
+	}
+	else if (EnOrDis == DISABLE){
+		if (I2Cx == I2C1){
+			I2C1_CLK_DIS();
+		}
+		else if (I2Cx == I2C2){
+			I2C2_CLK_DIS();
+		}
+		else if (I2Cx == I2C3){
+			I2C3_CLK_DIS();
+		}
+	}
+}
+void I2C_Init(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config){
+
+	uint32_t reg_temp = 0;
+	reg_temp |= (i2c_config.I2C_ACKControl << I2C_CR1_ACK);
+
+	I2Cx->I2C_CR1 = reg_temp;
+
+	reg_temp = 0;
+	reg_temp = RCC_GetPCLK1Value() / 100000000U;
+
+	I2Cx->I2C_CR2 = reg_temp & 0x3F;
+
+	reg_temp = 0;
+	reg_temp = i2c_config.I2C_DeviceAddress << 1;
+	reg_temp |= 1 << 14; 	// reserved bit 14 should be enabled by the software
+	I2Cx->I2C_OAR1 = reg_temp;
+
+	// CCR calculations
+	uint16_t ccr_value = 0;
+	reg_temp = 0;
+	if (i2c_config.I2C_SCLSpeed <= I2C_SCL_SPEED_SM){
+		ccr_value = RCC_GetPCLK1Value() / (2 * i2c_config.I2C_SCLSpeed);
+		reg_temp |= ccr_value & 0xFFF;
+	}
+	else{
+		reg_temp |= 1 << 15;
+		reg_temp |= i2c_config.I2C_FMDutyCycle << 14;
+		if (i2c_config.I2C_FMDutyCycle == I2C_FMDutyCycle_2){
+			ccr_value = RCC_GetPCLK1Value() / (3 * i2c_config.I2C_SCLSpeed);
+		}
+		else if (i2c_config.I2C_FMDutyCycle == I2C_FMDutyCycle_16_9){
+			ccr_value = RCC_GetPCLK1Value() / (25 * i2c_config.I2C_SCLSpeed);
+
+		}
+		reg_temp |= ccr_value & 0xFFF;
+	}
+	I2C_PeriClockControl(I2Cx, ENABLE);
+}
+
+
+void I2C_DeInit(I2C_Typedef_t I2Cx){
+
+}
+
+void I2C_Master_Send(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* pTxBuffer, uint32_t len, uint8_t slave_address){
+
+	// start condition generation
+	I2C_Generate_StartCondition(I2Cx);
+
+	// wait until SB bit is equal to 0
+	while( !(I2Cx->I2C_SR1 & 1));
+
+	// write slave address and read/write bit
+	uint8_t slave_address = i2c_config.I2C_DeviceAddress;
+	I2C_Send_slave_address(I2Cx, slave_address);
+	read_write_bit(I2Cx, 0);
+
+	// wait until ADDR flag is set
+	while ( !((i2c_handler->I2Cx)->I2C_SR1 &  (1 << 1)));
+
+	// clear the ADDR flag
+	static void clear_ADDR_bit(I2C_Typedef_t* I2Cx);
+
+	// send process
+	while (len != 0){
+		// check if TXE is set, then Data register is empty
+		while (I2Cx->I2C_SR1 &  (1 << 7));
+		I2Cx->I2C_DR = *pTxBuffer;
+		pTxBuffer ++;
+		len --;
+	}
+
+	// wait for BTF and TXE are equal to 1
+	while ( !( (i2c_handler->I2Cx)->I2C_SR1 & (1 << 7) ) );
+	while ( !( (i2c_handler->I2Cx)->I2C_SR1 & (1 << 2) ) );
+
+	// Generate stop condition
+	I2C_Generate_StopCondition()
+}
+
+static void I2C_Generate_StartCondition(I2C_Typedef_t* I2Cx){
+	I2Cx->I2C_CR1 |= ( 1 << 8 );
+}
+
+static void I2C_Send_slave_address(I2C_Typedef_t* I2Cx, uint8_t slave_address){
+	I2Cx->I2C_DR = slave_address << 1;
+}
+
+static void read_write_bit(I2C_Typedef_t* I2Cx, uint8_t bit){
+	if (bit == 0){
+		I2Cx->I2C_DR &= ~(1);
+	}
+	else {
+		I2Cx->I2C_DR |= 1;
+	}
+}
+
+static void clear_ADDR_bit(I2C_Typedef_t* I2Cx){
+	uint32_t dummy_read;
+	dummy_read = I2Cx->I2C_SR1;
+	dummy_read = I2Cx->I2C_SR2;
+	(void)dummy_read;
+}
+
+static void I2C_Generate_StopCondition(I2C_Typedef_t* I2Cx){
+	I2Cx->I2C_CR1 |= ( 1 << 9 );
+}

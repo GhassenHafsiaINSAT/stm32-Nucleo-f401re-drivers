@@ -1,3 +1,9 @@
-i2c.c:11:6:I2C_PeriClockControl	9
-i2c.c:35:6:I2C_Init	4
-i2c.c:75:6:I2C_DeInit	1
+i2c.c:18:13:I2C_Generate_StartCondition	1
+i2c.c:22:13:I2C_Send_slave_address	2
+i2c.c:33:13:I2C_clear_ADDR_bit	1
+i2c.c:40:13:I2C_Generate_StopCondition	1
+i2c.c:46:6:I2C_PeriClockControl	9
+i2c.c:70:6:I2C_Init	5
+i2c.c:119:6:I2C_DeInit	1
+i2c.c:123:6:I2C_Master_Send	7
+i2c.c:157:6:I2C_Master_Receive	9

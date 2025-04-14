@@ -135,7 +135,7 @@ void I2C_Master_Send(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* pTxB
 	while ( !(I2Cx->I2C_SR1 &  (1 << 1)));
 
 	// clear the ADDR flag
-	I2C_clear_ADDR_bit(I2Cx);
+	clear_ADDR_bit(I2Cx);
 
 	// send process
 	while (len != 0){

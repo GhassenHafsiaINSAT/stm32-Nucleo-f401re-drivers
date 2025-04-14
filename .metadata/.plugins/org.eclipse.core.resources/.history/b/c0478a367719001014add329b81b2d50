@@ -19,7 +19,7 @@ static void I2C_Generate_StartCondition(I2C_Typedef_t* I2Cx){
 	I2Cx->I2C_CR1 |= ( 1 << 8 );
 }
 
-static void I2C_Send_slave_address(I2C_Typedef_t* I2Cx, uint8_t slave_address, uint8_t bit){
+static void I2C_Send_slave_address(I2C_Typedef_t* I2Cx, uint8_t slave_address){
 	uint8_t reg_temp = slave_address << 1;
 	if (bit == 0){
 		reg_temp &= ~(1);
@@ -30,7 +30,7 @@ static void I2C_Send_slave_address(I2C_Typedef_t* I2Cx, uint8_t slave_address, u
 	I2Cx->I2C_DR = reg_temp;
 }
 
-static void I2C_clear_ADDR_bit(I2C_Typedef_t* I2Cx){
+static void clear_ADDR_bit(I2C_Typedef_t* I2Cx){
 	uint32_t dummy_read;
 	dummy_read = I2Cx->I2C_SR1;
 	dummy_read = I2Cx->I2C_SR2;
@@ -135,7 +135,7 @@ void I2C_Master_Send(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* pTxB
 	while ( !(I2Cx->I2C_SR1 &  (1 << 1)));
 
 	// clear the ADDR flag
-	I2C_clear_ADDR_bit(I2Cx);
+	clear_ADDR_bit(I2Cx);
 
 	// send process
 	while (len != 0){

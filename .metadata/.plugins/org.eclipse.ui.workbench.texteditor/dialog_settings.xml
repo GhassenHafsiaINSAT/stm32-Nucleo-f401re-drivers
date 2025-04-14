@@ -8,6 +8,7 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="i2c_handler"/>
 			<item value="I2C"/>
 			<item value="SPI"/>
 		</list>
