@@ -207,17 +207,3 @@ void I2C_Master_Receive(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* p
 		I2Cx->I2C_CR1 |= (1 << 10);
 	}
 }
-void I2C_Master_Send_IT(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* pTxBuffer, uint32_t len, uint8_t slave_address){
-
-}
-
-void I2C_Master_Receive_IT(I2C_Typedef_t* I2Cx, I2C_config_t i2c_config, uint8_t* pRxBuffer, uint32_t len, uint8_t slave_address){
-
-}
-
-void I2C_IRQInterruptConfig(uint8_t IRQ_num, uint8_t EnOrDis){
-
-}
-void I2C_IRQPriorityConfig(uint8_t IRQ_num, uint32_t IRQPriority){
-
-}
